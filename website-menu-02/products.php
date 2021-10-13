@@ -72,8 +72,8 @@
       </header>
 
     <div class="hero">
-      <br><br><br>
-      <div class="card">
+      <br><br><br><br><br><br>
+      <!-- <div class="card"> -->
           <?php
               $sql = "SELECT * 
                       FROM   tblProduct";
@@ -82,16 +82,18 @@
               while($row = mysqli_fetch_assoc($result))
               {
                 ?>
-                <img src="img/" alt="" style="width:100%">
-                <p class="hidden"><?php echo $row["ProductID"]; ?><p>
-                <h2><?php echo $row["Name"]; ?></h2>
-                <p class="price"><?php echo "£".$row["Price"]; ?></p>
-                <a href='view_product_details.php?id=".$row["ProductID"]."&add=true'>View Further Details</a>
-                <p><button>Add to Cart</button></p>
-                <?php
+                <div class="card">
+                  <img src="img/<?php echo $row["Image"]; ?>" alt="" style="width:100%">
+                  <p hidden><?php echo $row["ProductID"]; ?><p>
+                  <h2><?php echo $row["Name"]; ?></h2>
+                  <p class="price"><?php echo $row["Description"]; ?><p>
+                  <p class="price"><?php echo "£".$row["Price"]; ?></p>
+                  <a href='view_product_details.php?id=".$row["ProductID"]."&add=true'>View Further Details</a>
+                  <p><button>Add to Cart</button></p>
+                  <?php
               }
           ?>
-      </div>
+                </div>
     </div>
   
     <script src="js/jquery-3.3.1.min.js"></script>
