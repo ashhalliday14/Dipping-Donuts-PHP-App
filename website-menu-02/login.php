@@ -17,11 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Products</title>
-    <?php
-        //includes
-        include 'connection.php';
-    ?>
+    <title>Login</title>
   </head>
   <body>
 
@@ -33,7 +29,7 @@
           </div>
         </div>
         <div class="site-mobile-menu-body"></div>
-      </div>
+    </div>
 
 
 
@@ -59,7 +55,7 @@
                   <li class="active"><a href="index.html" class="nav-link">Home</a></li>
                   <li ><a href="products.php" class="nav-link">Products</a></li>
                   <li><a href="#" class="nav-link">Shopping Cart</a></li>
-                  <li><a href="#" class="nav-link">Login</a></li>
+                  <li><a href="login.php" class="nav-link">Login</a></li>
                   <li><a href="#" class="nav-link">Register</a></li>
                 </ul>
               </nav>
@@ -71,30 +67,57 @@
 
       </header>
 
-    <div class="hero">
-      <br><br><br><br><br><br>
-      <!-- <div class="card"> -->
-          <?php
-              $sql = "SELECT * 
-                      FROM   tblProduct";
-              $result = mysqli_query($conn, $sql);
+      <body>
 
-              while($row = mysqli_fetch_assoc($result))
-              {
-                ?>
-                <div class="card">
-                  <img src="img/<?php echo $row["Image"]; ?>" alt="" style="width:100%">
-                  <p hidden><?php echo $row["ProductID"]; ?><p>
-                  <h2><?php echo $row["Name"]; ?></h2>
-                  <p class="price"><?php echo "£".$row["Price"]; ?></p>
-                  <a href='view_product_details.php?id=".$row["ProductID"]."&add=true'>View Further Details</a>
-                  <p><button>Add to Cart</button></p>
-                  <?php
-              }
-          ?>
-                </div>
+    <div class="hero">
+        
+        <p>Please Login to Purchase Donuts!</p>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" name="login" class="herologin1" allign="center">
+            <input type="text" name="username" placeholder="Enter Username..."/>
+            <br><br>
+            <input type="password" name="password" placeholder="Enter Password..."/>
+            <br><br>
+            <input name="submit" type="submit" value="Login"/>
+        </form>
     </div>
+</body>
+
+
+    <?php
+
+        //includes
+        include_once('connection.php');
+        include_once('cleanse.php');
+
+        //check login form has been submitted
+        if(isset($_POST['submit']))
+        {
+            $username = mysqli_real_escape_string($conn, $_POST['username']);
+            $password = mysqli_real_escape_string($conn, $_POST['password']);
   
+            $username = clean($username);
+            $password = clean($password);
+  
+            //prepared statement login query
+            $stmt = $conn->prepare("SELECT * FROM tblLogin WHERE Username=? AND Password=? LIMIT 1");
+            $stmt->bind_param('ss', $username, $password);
+            $stmt->execute();
+            $stmt->bind_result($username, $password);
+            $stmt->store_result();
+  
+            //check number of rows matched is only 1
+            if($stmt->num_rows == 1)
+            {
+                header("Location: index.php");
+            }
+            else
+            {
+                echo "LOL FAIL!";
+            }
+        }
+    ?>
+
+
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
